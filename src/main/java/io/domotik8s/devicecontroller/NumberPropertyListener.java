@@ -1,9 +1,10 @@
 package io.domotik8s.devicecontroller;
 
 import io.domotik8s.model.bool.BooleanProperty;
-import io.domotik8s.model.bool.BooleanPropertyList;
 import io.domotik8s.model.dev.Device;
 import io.domotik8s.model.dev.DeviceList;
+import io.domotik8s.model.num.NumberProperty;
+import io.domotik8s.model.num.NumberPropertyList;
 import io.kubernetes.client.extended.controller.reconciler.Request;
 import io.kubernetes.client.informer.ResourceEventHandler;
 import io.kubernetes.client.informer.SharedIndexInformer;
@@ -24,20 +25,20 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class BooleanPropertyListener implements ResourceEventHandler<BooleanProperty> {
+public class NumberPropertyListener implements ResourceEventHandler<NumberProperty> {
 
 
-    private Logger logger = LoggerFactory.getLogger(BooleanPropertyListener.class);
+    private Logger logger = LoggerFactory.getLogger(NumberPropertyListener.class);
 
 
     @Qualifier("deviceClient")
     private final GenericKubernetesApi<Device, DeviceList> deviceClient;
 
     @Qualifier("booleanPropertyClient")
-    private final GenericKubernetesApi<BooleanProperty, BooleanPropertyList> booleanPropertyclient;
+    private final GenericKubernetesApi<NumberProperty, NumberPropertyList> numberPropertyclient;
 
     @Qualifier("booleanPropertyInformer")
-    private final SharedIndexInformer<BooleanProperty> informer;
+    private final SharedIndexInformer<NumberProperty> informer;
 
     private final DeviceReconciler reconciler;
 
@@ -49,17 +50,17 @@ public class BooleanPropertyListener implements ResourceEventHandler<BooleanProp
 
 
     @Override
-    public void onAdd(BooleanProperty booleanProperty) {
+    public void onAdd(NumberProperty booleanProperty) {
         // ignore
     }
 
     @Override
-    public void onUpdate(BooleanProperty before, BooleanProperty after) {
+    public void onUpdate(NumberProperty before, NumberProperty after) {
 
     }
 
     @Override
-    public void onDelete(BooleanProperty booleanProperty, boolean b) {
+    public void onDelete(NumberProperty booleanProperty, boolean b) {
         V1ObjectMeta metadata = booleanProperty.getMetadata();
         List<V1OwnerReference> ownerRefs = metadata.getOwnerReferences();
 
