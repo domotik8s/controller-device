@@ -1,0 +1,34 @@
+apiVersion: domotik8s.io/v1beta1
+kind: Device
+metadata:
+  name: office-cover
+  namespace: default
+  labels:
+    area: "House"
+    floor: "GroundFloor"
+    room: "Office"
+    name: "WindowCover"
+spec:
+  properties:
+    move:
+      type: BOOLEAN
+      addressSpec:
+        system: "knx"
+        instance: "knx"
+        write: "1/1/9"
+        dpt: "1.008"
+    stop:
+      type: BOOLEAN
+      addressSpec:
+        system: "knx"
+        instance: "knx"
+        write: "1/1/10"
+        dpt: "1.008"
+    position:
+      type: NUMBER
+      addressSpec:
+        system: "knx"
+        instance: "knx"
+        read: "1/1/11"
+        write: "1/1/12"
+        dpt: "5.001"
