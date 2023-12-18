@@ -1,0 +1,27 @@
+apiVersion: domotik8s.io/v1beta1
+kind: Device
+metadata:
+  name: dining-room-light
+  labels:
+    area: "House"
+    floor: "GroundFloor"
+    room: "DiningRoom"
+    name: "CeilingLight"
+spec:
+  properties:
+    power:
+      type: BOOLEAN
+      addressSpec:
+        system: "knx"
+        instance: "knx"
+        read: "0/0/23"
+        write: "0/0/21"
+        dpt: "1.001"
+    brightness:
+      type: NUMBER
+      addressSpec:
+        system: "knx"
+        instance: "knx"
+        read: "0/0/24"
+        write: "0/0/25"
+        dpt: "5.001"

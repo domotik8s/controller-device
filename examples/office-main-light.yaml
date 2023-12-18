@@ -1,0 +1,19 @@
+apiVersion: domotik8s.io/v1beta1
+kind: Device
+metadata:
+  name: office-main-light
+  labels:
+    area: "House"
+    floor: "GroundFloor"
+    room: "Office"
+    name: "CeilingLight"
+spec:
+  properties:
+    power:
+      type: BOOLEAN
+      addressSpec:
+        system: "knx"
+        instance: "knx"
+        read: "0/1/15"
+        write: "0/1/14"
+        dpt: "1.001"
