@@ -50,18 +50,16 @@ public class BooleanPropertyListener implements ResourceEventHandler<BooleanProp
 
     @Override
     public void onAdd(BooleanProperty booleanProperty) {
-
+        // ignore
     }
 
     @Override
     public void onUpdate(BooleanProperty booleanProperty, BooleanProperty apiType1) {
-
+        // TODO: Patch states in to device
     }
 
     @Override
     public void onDelete(BooleanProperty booleanProperty, boolean b) {
-        System.out.println("DELETED");
-
         V1ObjectMeta metadata = booleanProperty.getMetadata();
         List<V1OwnerReference> ownerRefs = metadata.getOwnerReferences();
 

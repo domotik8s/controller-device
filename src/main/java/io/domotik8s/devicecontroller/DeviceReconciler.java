@@ -59,9 +59,7 @@ public class DeviceReconciler implements Reconciler {
         // Create all properties of the device
         createProperties(resource);
 
-
-
-        // TODO: patch desired state
+        // TODO: patch desired state into properties
 
         return new Result(false);
     }
