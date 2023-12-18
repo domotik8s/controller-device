@@ -88,8 +88,10 @@ public class DeviceReconciler implements Reconciler {
                 property = createNumberProperty(deviceName, name, template.getAddressSpec());
             }
 
-            // Labels
             V1ObjectMeta metadata = property.getMetadata();
+            metadata.setNamespace(resource.getMetadata().getNamespace());
+
+            // Labels
             for (Map.Entry<String, String> labelEntry: resource.getMetadata().getLabels().entrySet()) {
                 metadata.putLabelsItem(labelEntry.getKey(), labelEntry.getValue());
             }

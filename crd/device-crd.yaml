@@ -58,7 +58,7 @@ spec:
                     type: string
                     format: date-time
 
-  scope: Cluster
+  scope: Namespaced
   names:
     plural: devices
     singular: device
