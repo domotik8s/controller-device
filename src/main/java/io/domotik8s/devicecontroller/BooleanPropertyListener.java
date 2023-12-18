@@ -55,7 +55,7 @@ public class BooleanPropertyListener implements ResourceEventHandler<BooleanProp
 
     @Override
     public void onUpdate(BooleanProperty before, BooleanProperty after) {
-
+        // ignore
     }
 
     @Override

@@ -56,7 +56,7 @@ public class NumberPropertyListener implements ResourceEventHandler<NumberProper
 
     @Override
     public void onUpdate(NumberProperty before, NumberProperty after) {
-
+        // ignore
     }
 
     @Override
