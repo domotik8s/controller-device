@@ -20,6 +20,8 @@ public class BooleanPropertySpec implements PropertySpec<BooleanPropertyState> {
 
     private BooleanPropertyState state;
 
+    private BooleanSemantic semantic;
+
     private Boolean locked;
 
 }

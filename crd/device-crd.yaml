@@ -14,45 +14,60 @@ spec:
       schema:
         openAPIV3Schema:
           type: object
-
           properties:
-
             # SPEC
             spec:
               type: object
               properties:
-
                 # PROPERTIES
                 properties:
                   type: object
-                  additionalProperties:
-                    type: object
-                    properties:
-                      name:
-                        type: string
-                      system:
-                        type: string
-                      instance:
-                        type: string
-                    x-kubernetes-preserve-unknown-fields: true
-                  # This line allows for fields other than those explicitly defined above
-                  x-kubernetes-preserve-unknown-fields: true
-
-                # STATE
-                state:
-                  type: object
-                  x-kubernetes-preserve-unknown-fields: true
-
+                  properties:
+                    # BOOLEAN
+                    boolean:
+                      type: object
+                      x-kubernetes-preserve-unknown-fields: true
+                      # PROPERTYSPEC
+                      additionalProperties:
+                        type: object
+                        properties:
+                          # ADDRESS
+                          address:
+                            type: object
+                            x-kubernetes-preserve-unknown-fields: true
+                            properties:
+                              system:
+                                type: string
+                              instance:
+                                type: string
+                          semantic:
+                            type: object
+                            properties:
+                              meaning:
+                                type: string
+                              reversed:
+                                type: boolean
+                    # NUMBER
+                    number:
+                      type: object
+                      x-kubernetes-preserve-unknown-fields: true
+                      # PROPERTYSPEC
+                      additionalProperties:
+                        type: object
+                        properties:
+                          # ADDRESS
+                          address:
+                            type: object
+                            x-kubernetes-preserve-unknown-fields: true
+                            properties:
+                              system:
+                                type: string
+                              instance:
+                                type: string
             # STATUS
             status:
               type: object
               properties:
-
-                # STATE
-                state:
-                  type: object
-                  x-kubernetes-preserve-unknown-fields: true
-
                 # LASTUPDATED
                 lastUpdated:
                     type: string

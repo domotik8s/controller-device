@@ -3,12 +3,10 @@ package io.domotik8s.model.dev;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Map;
-
 @Data
 @NoArgsConstructor
 public class DeviceSpec {
 
-    private Map<String, PropertyTemplate> properties;
+    private DeviceProperties properties;
 
 }

@@ -10,11 +10,15 @@ metadata:
     name: "CeilingLight"
 spec:
   properties:
-    power:
-      type: BOOLEAN
-      addressSpec:
-        system: "knx"
-        instance: "knx"
-        read: "0/1/15"
-        write: "0/1/14"
-        dpt: "1.001"
+    boolean:
+      power:
+        spec:
+          address:
+            system: "knx"
+            instance: "knx"
+            read: "0/1/15"
+            write: "0/1/14"
+            dpt: "1.001"
+          semantic:
+            meaning: OFF_ON
+            reversed: false

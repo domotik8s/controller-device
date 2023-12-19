@@ -10,19 +10,22 @@ metadata:
     name: "CeilingLight"
 spec:
   properties:
-    power:
-      type: BOOLEAN
-      addressSpec:
-        system: "knx"
-        instance: "knx"
-        read: "0/0/23"
-        write: "0/0/21"
-        dpt: "1.001"
-    brightness:
-      type: NUMBER
-      addressSpec:
-        system: "knx"
-        instance: "knx"
-        read: "0/0/24"
-        write: "0/0/25"
-        dpt: "5.001"
+    boolean:
+      power:
+        address:
+          system: "knx"
+          instance: "knx"
+          read: "0/0/23"
+          write: "0/0/21"
+          dpt: "1.001"
+        semantic:
+          meaning: OFF_ON
+          reversed: false
+    number:
+      brightness:
+        address:
+          system: "knx"
+          instance: "knx"
+          read: "0/0/24"
+          write: "0/0/25"
+          dpt: "5.001"

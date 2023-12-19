@@ -4,6 +4,7 @@ import io.domotik8s.model.Property;
 import io.domotik8s.model.bool.BooleanProperty;
 import io.domotik8s.model.bool.BooleanPropertyList;
 import io.domotik8s.model.bool.BooleanPropertySpec;
+import io.domotik8s.model.bool.BooleanSemantic;
 import io.domotik8s.model.dev.*;
 import io.domotik8s.model.num.NumberProperty;
 import io.domotik8s.model.num.NumberPropertyList;
@@ -63,37 +64,35 @@ public class DeviceReconciler implements Reconciler {
     }
 
     private void createProperties(Device resource) {
-        Set<Map.Entry<String, PropertyTemplate>> entries = Optional.ofNullable(resource)
+        Optional<String> deviceNameOpt = Optional.ofNullable(resource)
+                .map(Device::getMetadata)
+                .map(V1ObjectMeta::getName);
+        if (deviceNameOpt.isEmpty()) return;
+        String deviceName = deviceNameOpt.get();
+
+        Optional<DeviceProperties> propertiesOpt = Optional.ofNullable(resource)
                 .map(Device::getSpec)
-                .map(DeviceSpec::getProperties)
-                .map((map) -> map.entrySet())
-                .orElse(Set.of());
+                .map(DeviceSpec::getProperties);
 
-        String deviceName = resource.getMetadata().getName();
+        if (propertiesOpt.isEmpty()) return;
 
-        for (Map.Entry<String, PropertyTemplate> entry: entries) {
-            String name = entry.getKey();
-            PropertyTemplate template = entry.getValue();
+        Map<String, BooleanPropertySpec> booleanProperties = propertiesOpt.map(DeviceProperties::getBooleanProperties).orElse(Map.of());
+        for (String propertyName: booleanProperties.keySet()) {
+            BooleanPropertySpec spec = booleanProperties.get(propertyName);
+            if (spec == null) continue;
 
-            Property<?, ?> property = null;
-
-            PropertyType type = template.getType();
-            if (type == null) continue;
-
-            if (type == PropertyType.BOOLEAN) {
-                property = createBooleanProperty(deviceName, name, template.getAddressSpec());
-            } else if (type == PropertyType.NUMBER) {
-                property = createNumberProperty(deviceName, name, template.getAddressSpec());
-            }
-
-            V1ObjectMeta metadata = property.getMetadata();
+            V1ObjectMeta metadata = new V1ObjectMeta();
+            metadata.setName(deviceName + "-" + propertyName);
             metadata.setNamespace(resource.getMetadata().getNamespace());
 
+            BooleanProperty property = new BooleanProperty();
+            property.setSpec(spec);
+            property.setMetadata(metadata);
+
             // Labels
-            for (Map.Entry<String, String> labelEntry: resource.getMetadata().getLabels().entrySet()) {
+            for (Map.Entry<String, String> labelEntry: resource.getMetadata().getLabels().entrySet())
                 metadata.putLabelsItem(labelEntry.getKey(), labelEntry.getValue());
-            }
-            metadata.putLabelsItem("property", name);
+            metadata.putLabelsItem("property", propertyName);
 
             // Owner Reference
             List<V1OwnerReference> refs = Optional.ofNullable(metadata.getOwnerReferences()).orElse(new ArrayList<>());
@@ -106,40 +105,41 @@ public class DeviceReconciler implements Reconciler {
             ref.uid(resource.getMetadata().getUid());
             refs.add(ref);
 
-            if (property instanceof BooleanProperty) {
-                booleanPropertyClient.create((BooleanProperty) property);
-            } else if (property instanceof NumberProperty) {
-                numberPropertyClient.create((NumberProperty) property);
-            }
+            booleanPropertyClient.create(property);
+        }
+
+        Map<String, NumberPropertySpec> numberProperties = propertiesOpt.map(DeviceProperties::getNumberProperties).orElse(Map.of());
+        for (String propertyName: numberProperties.keySet()) {
+            NumberPropertySpec spec = numberProperties.get(propertyName);
+            if (spec == null) continue;
+
+            V1ObjectMeta metadata = new V1ObjectMeta();
+            metadata.setName(deviceName + "-" + propertyName);
+            metadata.setNamespace(resource.getMetadata().getNamespace());
+
+            NumberProperty property = new NumberProperty();
+            property.setSpec(spec);
+            property.setMetadata(metadata);
+
+            // Labels
+            for (Map.Entry<String, String> labelEntry: resource.getMetadata().getLabels().entrySet())
+                metadata.putLabelsItem(labelEntry.getKey(), labelEntry.getValue());
+            metadata.putLabelsItem("property", propertyName);
+
+            // Owner Reference
+            List<V1OwnerReference> refs = Optional.ofNullable(metadata.getOwnerReferences()).orElse(new ArrayList<>());
+            metadata.setOwnerReferences(refs);
+
+            V1OwnerReference ref = new V1OwnerReference();
+            ref.apiVersion("domotik8s.io/v1beta1");
+            ref.kind("Device");
+            ref.name(deviceName);
+            ref.uid(resource.getMetadata().getUid());
+            refs.add(ref);
+
+            numberPropertyClient.create(property);
         }
     }
-
-    private Property<?,?> createNumberProperty(String deviceName, String propertyName, Map<String, Object> addressSpec) {
-        V1ObjectMeta metadata = new V1ObjectMeta();
-        metadata.setName(deviceName + "-" + propertyName);
-
-        NumberPropertySpec spec = new NumberPropertySpec();
-        spec.setAddress(addressSpec);
-
-        NumberProperty property = new NumberProperty();
-        property.setSpec(spec);
-        property.setMetadata(metadata);
-        return property;
-    }
-
-    private Property<?,?> createBooleanProperty(String deviceName, String propertyName, Map<String, Object> addressSpec) {
-        V1ObjectMeta metadata = new V1ObjectMeta();
-        metadata.setName(deviceName + "-" + propertyName);
-
-        BooleanPropertySpec spec = new BooleanPropertySpec();
-        spec.setAddress(addressSpec);
-
-        BooleanProperty property = new BooleanProperty();
-        property.setSpec(spec);
-        property.setMetadata(metadata);
-        return property;
-    }
-
 
     protected String createKey(Request request) {
         StringBuilder key = new StringBuilder();
