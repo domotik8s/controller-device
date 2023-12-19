@@ -33,9 +33,6 @@ public class BooleanPropertyListener implements ResourceEventHandler<BooleanProp
     @Qualifier("deviceClient")
     private final GenericKubernetesApi<Device, DeviceList> deviceClient;
 
-    @Qualifier("booleanPropertyClient")
-    private final GenericKubernetesApi<BooleanProperty, BooleanPropertyList> booleanPropertyclient;
-
     @Qualifier("booleanPropertyInformer")
     private final SharedIndexInformer<BooleanProperty> informer;
 

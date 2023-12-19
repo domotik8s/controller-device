@@ -34,10 +34,7 @@ public class NumberPropertyListener implements ResourceEventHandler<NumberProper
     @Qualifier("deviceClient")
     private final GenericKubernetesApi<Device, DeviceList> deviceClient;
 
-    @Qualifier("booleanPropertyClient")
-    private final GenericKubernetesApi<NumberProperty, NumberPropertyList> numberPropertyclient;
-
-    @Qualifier("booleanPropertyInformer")
+    @Qualifier("numberPropertyInformer")
     private final SharedIndexInformer<NumberProperty> informer;
 
     private final DeviceReconciler reconciler;
