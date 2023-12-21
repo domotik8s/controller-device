@@ -37,7 +37,7 @@ public class ControllerManagerConfig {
                 new LeaderElectingController(
                         new LeaderElector(
                                 new LeaderElectionConfig(
-                                        new EndpointsLock("kube-system", "leader-election", "foo"),
+                                        new EndpointsLock("kube-system", "leader-election", "controller-device"),
                                         Duration.ofMillis(10000),
                                         Duration.ofMillis(8000),
                                         Duration.ofMillis(5000))),
